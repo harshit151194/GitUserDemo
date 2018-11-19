@@ -31,10 +31,12 @@ class UserDetails: Decodable {
     let avatar_url: String!
     let url: String!
     let location: String = "Pune"
+    let repos_url: String!
     
     enum DataKeys: String, CodingKey {
         case login
         case url
         case avatar_url
+        case repos_url
     }
 }

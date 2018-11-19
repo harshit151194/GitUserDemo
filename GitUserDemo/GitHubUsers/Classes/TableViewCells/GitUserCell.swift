@@ -14,6 +14,9 @@ class GitUserCell: UITableViewCell {
     @IBOutlet weak var imgVProfile: UIImageView!
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var lblLocation: UILabel!
+    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var lblBio: UILabel!
+    @IBOutlet weak var btnArrow: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,6 +29,8 @@ class GitUserCell: UITableViewCell {
         
         print(userDetail.avatar_url ?? "")
         imgVProfile.kf.setImage(with: URL(string: userDetail.avatar_url ?? ""), placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
+        
+    
         
     }
 

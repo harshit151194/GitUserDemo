@@ -9,7 +9,10 @@
 import UIKit
 
 // Configure your base URL.
-let BaseURL = "https://api.github.com/search/users?q=location:india&sort=stars&order=asce&page=1&p er_page=100"
+//let BaseURL = "https://api.github.com/search/users?q=location:india&sort=stars&order=asce&page=1&per_page=100"
+
+let BaseURL = ""
+let getUsers = "https://api.github.com/search/users?q=location:india&sort=stars&order=asce&page=1&per_page=100"
 
 public enum HTTPMethod: String {
     case get                         = "GET"
@@ -49,9 +52,9 @@ class GitService: NSObject {
     var urlSession: URLSession!
     
     // MARK: Public
-    public func requestWith(method: HTTPMethod, parameters: HTTPParameters?, queryParam: HTTPParameters? = nil, retryCount:Int, showHud: Bool, fatalStatusCodes: [HTTPStatusCode] = defaultFatalStatusCodes, completionHandler: @escaping(Bool, Data?, Error?) -> Void) -> Void {
+    public func requestWith(method: HTTPMethod, parameters: HTTPParameters?, queryParam: HTTPParameters? = nil, getParam : String, retryCount:Int, showHud: Bool, fatalStatusCodes: [HTTPStatusCode] = defaultFatalStatusCodes, completionHandler: @escaping(Bool, Data?, Error?) -> Void) -> Void {
         
-        let request = enqueueRequestWith(method: method, parameters: parameters, queryParam: queryParam)
+        let request = enqueueRequestWith(method: method, parameters: parameters, queryParam: queryParam, getParam: getParam)
         
         self.request(request, method: method, parameters: parameters, retryCount: retryCount, showHud: showHud, fatalStatusCodes: fatalStatusCodes, completionHandler: completionHandler)
     }
@@ -171,15 +174,23 @@ class GitService: NSObject {
                 }
             }
             
+            if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [[String:Any]] {
+                
+                print(json)
+                    completionHandler(true, data, nil)
+            }
+            
         } catch let error {
             completionHandler(false, nil, error)
         }
     }
     
     // MARK: URLRequest
-    fileprivate func enqueueRequestWith(method: HTTPMethod, parameters: HTTPParameters?, queryParam: HTTPParameters? = nil) -> URLRequest {
+    fileprivate func enqueueRequestWith(method: HTTPMethod, parameters: HTTPParameters?, queryParam: HTTPParameters? = nil, getParam: String) -> URLRequest {
         
-        var urlString = BaseURL
+        var urlString = BaseURL+getParam
+        
+     // var urlString =  "https://api.github.com/users/AdiChat/repos
         urlString = encode(url: urlString)
         
         let url = URL(string: urlString)!
